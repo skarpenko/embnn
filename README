@@ -1,0 +1,31 @@
+              EmbNN (https://github.com/skarpenko/embnn)
+
+
+EmbNN is a minimalistic implementation of feedforward neural network.
+It was designed with embedded applications in mind.
+
+
+PREREQUISITES
+
+  Here is the list of prerequisites required to play with EmbNN:
+
+  * GNU C/C++ (http://gcc.gnu.org/). GNU C/C++ compiler toolchain is required
+    for building EmbNN demo application. However any modern C compiler should
+    work.
+
+
+DIRECTORY STRUCTURE
+
+  /
+  |- emb_nn_test.c - demo application.
+  |- emb.c         - inference implementation.
+  |- emb.h         - inference programming interface.
+  |- emb_train.c   - training implementation.
+  -- emb_train.h   - training programming interface.
+
+
+CONTACTS
+
+  Stepan Karpenko
+  e-mail (1): carp@mail.ru
+  e-mail (2): stepan.karpenko@gmail.com
