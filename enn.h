@@ -49,6 +49,7 @@ struct enn_prod_layer {
 /* Activation layer */
 struct enn_act_layer {
 	struct enn_layer base;	/* Base */
+	void *param;		/* Optional layer parameters */
 };
 
 
@@ -134,7 +135,29 @@ void enn_reluact_propagate(struct enn_layer *layer, const double *in);
 			.out = _name##_output,	\
 			.no = (_n),		\
 			.propagate = (_actf)	\
-		}				\
+		},				\
+		.param = NULL			\
+	}
+
+
+/*
+ * Define parameterized activation layer
+ *
+ * Arguments:
+ *   _name  - layer object name;
+ *   _actf  - activation function;
+ *   _n     - number of inputs / outputs;
+ *   _param - pointer to optional layer parameters.
+ */
+#define ENN_ACT_LAYER_PARAM(_name, _actf, _n, _param)	\
+	static double _name##_output[(_n)];		\
+	struct enn_act_layer _name = {			\
+		.base = {				\
+			.out = _name##_output,		\
+			.no = (_n),			\
+			.propagate = (_actf)		\
+		},					\
+		.param = (_param)			\
 	}
 
 

@@ -38,7 +38,8 @@ struct enn_mlp_train_layer {
 	struct enn_act_layer *al;	/* Pointer to activation layer */
 
 	/* Derivative of activation function */
-	double (*deriv)(struct enn_mlp_trainer*, double);
+	double (*deriv)(struct enn_mlp_trainer*, struct enn_mlp_train_layer*,
+		double);
 	/* Backpropagation step */
 	void (*backprop)(struct enn_mlp_trainer*, struct enn_mlp_train_layer*,
 		struct enn_mlp_train_layer*);
@@ -52,6 +53,8 @@ struct enn_mlp_train_layer {
 
 	double *deltas;		/* Deltas */
 	double *weights_diff;	/* Weights difference */
+
+	void *param;		/* Optional train layer parameters */
 };
 
 
@@ -65,6 +68,7 @@ struct enn_mlp_trainer {
 	/* Loss function */
 	double (*loss)(struct enn_mlp_trainer*, double, double);
 	const double *target;			/* Target vector */
+	void *param;				/* Optional trainer parameters */
 };
 
 
@@ -88,6 +92,7 @@ void enn_mlpl_adjust_weights(struct enn_mlp_trainer *mlp_train, const double *in
 
 /* Returns a pointer to a specified object */
 #define ENNP(_b) &(_b)
+
 
 /*
  * Define MLP training layer
@@ -113,6 +118,36 @@ void enn_mlpl_adjust_weights(struct enn_mlp_trainer *mlp_train, const double *in
 		.adjust_weights = enn_mlpl_adjust_weights,	\
 		.deltas = _name##_deltas,			\
 		.weights_diff = _name##_weights_diff,		\
+		.param = NULL					\
+	}
+
+
+/*
+ * Define parameterized MLP training layer
+ *
+ * Arguments:
+ *   _name  - training layer object name;
+ *   _pl    - a pointer to product layer;
+ *   _al    - a pointer to activation layer;
+ *   _ni    - number of inputs;
+ *   _no    - number of outputs;
+ *   _deriv - derivative of activation function;
+ *   _param - pointer to optional layer parameters.
+ */
+#define ENN_MLP_TRAIN_LAYER_PARAM(_name, _pl, _al, _ni, _no, _deriv, _param)	\
+	static double _name##_deltas[(_no)];					\
+	static double _name##_weights_diff[((_ni)+1)*(_no)];			\
+	struct enn_mlp_train_layer _name = {					\
+		.pl = (_pl),							\
+		.al = (_al),							\
+		.deriv = (_deriv),						\
+		.backprop = enn_mlpl_backprop,					\
+		.rand_weights = enn_mlpl_rand_weights,				\
+		.reset_diffs = enn_mlpl_reset_diffs,				\
+		.adjust_weights = enn_mlpl_adjust_weights,			\
+		.deltas = _name##_deltas,					\
+		.weights_diff = _name##_weights_diff,				\
+		.param = (_param)						\
 	}
 
 
@@ -134,7 +169,32 @@ void enn_mlpl_adjust_weights(struct enn_mlp_trainer *mlp_train, const double *in
 		.alpha = (_mf),								\
 		.eta = (_lr),								\
 		.lambda = (_wd),							\
-		.loss = (_loss)								\
+		.loss = (_loss),							\
+		.param = NULL								\
+	}
+
+
+/*
+ * Define parameterized MLP trainer
+ *
+ * Arguments:
+ *   _name - trainer object name;
+ *   _mf   - momentum factor;
+ *   _lr   - learning rate;
+ *   _wd   - weight decay;
+ *   _loss - loss function;
+ *   _param - pointer to optional parameters.
+ */
+#define ENN_MLP_TRAINER_PARAM(_name, _mf, _lr, _wd, _loss, _param, ...)			\
+	static struct enn_mlp_train_layer *_name##_train_layers[] = { __VA_ARGS__ };	\
+	struct enn_mlp_trainer _name = {						\
+		.layers = _name##_train_layers,						\
+		.nl = sizeof(_name##_train_layers) / sizeof(_name##_train_layers[0]),	\
+		.alpha = (_mf),								\
+		.eta = (_lr),								\
+		.lambda = (_wd),							\
+		.loss = (_loss),							\
+		.param = (_param)							\
 	}
 
 
@@ -187,9 +247,11 @@ double enn_mlp_get_lambda(struct enn_mlp_trainer *trainer)
 
 
 /* Derivative of logistic activation function */
-double enn_mlp_logact_deriv(struct enn_mlp_trainer *mlp_train, double in);
+double enn_mlp_logact_deriv(struct enn_mlp_trainer *mlp_train,
+	struct enn_mlp_train_layer *layer, double in);
 /* Derivative of rectified linear unit (ReLU) activation function */
-double enn_mlp_reluact_deriv(struct enn_mlp_trainer *mlp_train, double in);
+double enn_mlp_reluact_deriv(struct enn_mlp_trainer *mlp_train,
+	struct enn_mlp_train_layer *layer, double in);
 
 
 /* Loss function */

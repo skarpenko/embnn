@@ -38,7 +38,8 @@ void enn_mlpl_backprop_out(struct enn_mlp_trainer *mlp_train,
 	for(n = 0; n < layer->al->base.no; ++n) {
 		double diff = mlp_train->loss(mlp_train, layer->al->base.out[n],
 			mlp_train->target[n]);
-		layer->deltas[n] = layer->deriv(mlp_train, layer->pl->base.out[n]) * diff;
+		layer->deltas[n] = layer->deriv(mlp_train, layer,
+			layer->pl->base.out[n]) * diff;
 	}
 }
 
@@ -59,7 +60,8 @@ void enn_mlpl_backprop_hid(struct enn_mlp_trainer *mlp_train,
 			double w = next->pl->weights[sn * (next->pl->ni+1) + 1/*Bias*/ + n];
 			layer->deltas[n] += w * next->deltas[sn];
 		}
-		layer->deltas[n] *= layer->deriv(mlp_train, layer->pl->base.out[n]);
+		layer->deltas[n] *= layer->deriv(mlp_train, layer,
+			layer->pl->base.out[n]);
 	}
 }
 
@@ -134,11 +136,13 @@ void enn_mlpl_adjust_weights(struct enn_mlp_trainer *mlp_train, const double *in
 }
 
 
-double enn_mlp_logact_deriv(struct enn_mlp_trainer *mlp_train, double in)
+double enn_mlp_logact_deriv(struct enn_mlp_trainer *mlp_train,
+	struct enn_mlp_train_layer *layer, double in)
 {
 	double log_norm;
 
 	(void)mlp_train;
+	(void)layer;
 
 	log_norm = (1.0 / (1.0 + exp (-in)));
 
@@ -146,9 +150,11 @@ double enn_mlp_logact_deriv(struct enn_mlp_trainer *mlp_train, double in)
 }
 
 
-double enn_mlp_reluact_deriv(struct enn_mlp_trainer *mlp_train, double in)
+double enn_mlp_reluact_deriv(struct enn_mlp_trainer *mlp_train,
+	struct enn_mlp_train_layer *layer, double in)
 {
 	(void)mlp_train;
+	(void)layer;
 	return in >= 0.0 ? 1.0 : 0.0;
 }
 
