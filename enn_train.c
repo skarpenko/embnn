@@ -159,6 +159,17 @@ double enn_mlp_reluact_deriv(struct enn_mlp_trainer *mlp_train,
 }
 
 
+double enn_mlp_lreluact_deriv(struct enn_mlp_trainer *mlp_train,
+	struct enn_mlp_train_layer *layer, double in)
+{
+	struct enn_lrelu_params *p = (struct enn_lrelu_params*)layer->al->param;
+
+	(void)mlp_train;
+
+	return in >= 0.0 ? 1.0 : p->a;
+}
+
+
 double enn_mlp_loss(struct enn_mlp_trainer *mlp_train, double out, double target)
 {
 	(void)mlp_train;

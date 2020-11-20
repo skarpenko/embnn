@@ -59,6 +59,17 @@ void enn_reluact_propagate(struct enn_layer *layer, const double *in)
 }
 
 
+void enn_lreluact_propagate(struct enn_layer *layer, const double *in)
+{
+	struct enn_act_layer *al = (struct enn_act_layer*)layer;
+	struct enn_lrelu_params *p = (struct enn_lrelu_params*)al->param;
+	size_t n;
+
+	for(n = 0; n < layer->no; ++n)
+		layer->out[n] = (in[n] > 0.0 ? in[n] : p->a * in[n]);
+}
+
+
 void enn_propagate(struct enn_net *nn, const double *input)
 {
 	size_t l;

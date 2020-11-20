@@ -60,6 +60,12 @@ struct enn_net {
 };
 
 
+/* Leaky ReLU (LReLU) parameters */
+struct enn_lrelu_params {
+	double a;	/* Coefficient of leakage */
+};
+
+
 /*** Internally used functions ***/
 
 /* Propagation function for product layer */
@@ -68,6 +74,8 @@ void enn_prod_propagate(struct enn_layer *layer, const double *in);
 void enn_logact_propagate(struct enn_layer *layer, const double *in);
 /* Propagation function for rectified linear unit (ReLU) activation layer */
 void enn_reluact_propagate(struct enn_layer *layer, const double *in);
+/* Propagation function for Leaky ReLU activation layer */
+void enn_lreluact_propagate(struct enn_layer *layer, const double *in);
 
 
 /*** Public interface ***/
@@ -181,6 +189,22 @@ void enn_reluact_propagate(struct enn_layer *layer, const double *in);
  */
 #define ENN_RELUACT_LAYER(_name, _n)	\
 	ENN_ACT_LAYER(_name, enn_reluact_propagate, _n)
+
+
+/*
+ * Define Leaky ReLU activation layer
+ *
+ * Arguments:
+ *   _name - layer object name;
+ *   _n    - number of inputs / outputs;
+ *   _a    - coefficient of leakage.
+ */
+#define ENN_LRELUACT_LAYER(_name, _n, _a)			\
+	static struct enn_lrelu_params _name##lrelu_params = {	\
+		.a = (_a)					\
+	};							\
+	ENN_ACT_LAYER_PARAM(_name, enn_lreluact_propagate, _n,	\
+		&_name##lrelu_params)
 
 
 /*
