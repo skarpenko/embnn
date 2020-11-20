@@ -51,6 +51,14 @@ void enn_logact_propagate(struct enn_layer *layer, const double *in)
 }
 
 
+void enn_reluact_propagate(struct enn_layer *layer, const double *in)
+{
+	size_t n;
+	for(n = 0; n < layer->no; ++n)
+		layer->out[n] = (in[n] > 0.0 ? in[n] : 0.0);
+}
+
+
 void enn_propagate(struct enn_net *nn, const double *input)
 {
 	size_t l;

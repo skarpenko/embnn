@@ -65,6 +65,8 @@ struct enn_net {
 void enn_prod_propagate(struct enn_layer *layer, const double *in);
 /* Propagation function for logistic activation layer */
 void enn_logact_propagate(struct enn_layer *layer, const double *in);
+/* Propagation function for rectified linear unit (ReLU) activation layer */
+void enn_reluact_propagate(struct enn_layer *layer, const double *in);
 
 
 /*** Public interface ***/
@@ -145,6 +147,17 @@ void enn_logact_propagate(struct enn_layer *layer, const double *in);
  */
 #define ENN_LOGACT_LAYER(_name, _n)	\
 	ENN_ACT_LAYER(_name, enn_logact_propagate, _n)
+
+
+/*
+ * Define rectified linear unit (ReLU) activation layer
+ *
+ * Arguments:
+ *   _name - layer object name;
+ *   _n    - number of inputs / outputs.
+ */
+#define ENN_RELUACT_LAYER(_name, _n)	\
+	ENN_ACT_LAYER(_name, enn_reluact_propagate, _n)
 
 
 /*

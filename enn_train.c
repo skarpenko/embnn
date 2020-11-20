@@ -146,6 +146,13 @@ double enn_mlp_logact_deriv(struct enn_mlp_trainer *mlp_train, double in)
 }
 
 
+double enn_mlp_reluact_deriv(struct enn_mlp_trainer *mlp_train, double in)
+{
+	(void)mlp_train;
+	return in >= 0.0 ? 1.0 : 0.0;
+}
+
+
 double enn_mlp_loss(struct enn_mlp_trainer *mlp_train, double out, double target)
 {
 	(void)mlp_train;

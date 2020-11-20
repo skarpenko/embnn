@@ -188,6 +188,8 @@ double enn_mlp_get_lambda(struct enn_mlp_trainer *trainer)
 
 /* Derivative of logistic activation function */
 double enn_mlp_logact_deriv(struct enn_mlp_trainer *mlp_train, double in);
+/* Derivative of rectified linear unit (ReLU) activation function */
+double enn_mlp_reluact_deriv(struct enn_mlp_trainer *mlp_train, double in);
 
 
 /* Loss function */
