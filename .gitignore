@@ -1,0 +1,21 @@
+#
+# Normal rules
+#
+embnn_test
+.*
+*.dump
+*.patch
+
+
+#
+# git files that shouldn't be ignored
+#
+!.gitignore
+
+
+#
+# Backup files
+#
+*.orig
+*~
+\#*#
