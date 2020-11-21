@@ -28,6 +28,10 @@
 
 #include "enn.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 struct enn_mlp_trainer;
 
@@ -279,5 +283,9 @@ void enn_mlp_rand_weights(struct enn_mlp_trainer *mt);
  */
 void enn_mlp_backprop(struct enn_mlp_trainer *mt, const double *in, const double *target);
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _EMBEDDED_NN_TRAIN_H_ */

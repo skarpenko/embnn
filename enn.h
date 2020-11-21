@@ -28,6 +28,10 @@
 
 #include <stddef.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /* Base layer structure */
 struct enn_layer {
@@ -233,5 +237,9 @@ const double *enn_get_output(const struct enn_net *nn)
 /* Run forward propagation */
 void enn_propagate(struct enn_net *nn, const double *input);
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _EMBEDDED_NN_H_ */
