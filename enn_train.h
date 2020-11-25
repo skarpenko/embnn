@@ -259,6 +259,9 @@ double enn_mlp_reluact_deriv(struct enn_mlp_trainer *mlp_train,
 /* Derivative of Leaky ReLU activation function */
 double enn_mlp_lreluact_deriv(struct enn_mlp_trainer *mlp_train,
 	struct enn_mlp_train_layer *layer, double in);
+/* Derivative of hyperbolic tangent activation function */
+double enn_mlp_tanhact_deriv(struct enn_mlp_trainer *mlp_train,
+	struct enn_mlp_train_layer *layer, double in);
 
 
 /* Loss function */

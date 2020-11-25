@@ -80,6 +80,8 @@ void enn_logact_propagate(struct enn_layer *layer, const double *in);
 void enn_reluact_propagate(struct enn_layer *layer, const double *in);
 /* Propagation function for Leaky ReLU activation layer */
 void enn_lreluact_propagate(struct enn_layer *layer, const double *in);
+/* Propagation function for hyperbolic tangent activation layer */
+void enn_tanhact_propagate(struct enn_layer *layer, const double *in);
 
 
 /*** Public interface ***/
@@ -209,6 +211,17 @@ void enn_lreluact_propagate(struct enn_layer *layer, const double *in);
 	};							\
 	ENN_ACT_LAYER_PARAM(_name, enn_lreluact_propagate, _n,	\
 		&_name##lrelu_params)
+
+
+/*
+ * Define hyperbolic tangent activation layer
+ *
+ * Arguments:
+ *   _name - layer object name;
+ *   _n    - number of inputs / outputs.
+ */
+#define ENN_TANHACT_LAYER(_name, _n)	\
+	ENN_ACT_LAYER(_name, enn_tanhact_propagate, _n)
 
 
 /*

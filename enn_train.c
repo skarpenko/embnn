@@ -170,6 +170,21 @@ double enn_mlp_lreluact_deriv(struct enn_mlp_trainer *mlp_train,
 }
 
 
+double enn_mlp_tanhact_deriv(struct enn_mlp_trainer *mlp_train,
+	struct enn_mlp_train_layer *layer, double in)
+{
+	double tanh2;
+
+	(void)mlp_train;
+	(void)layer;
+
+	tanh2 = tanh(in);
+	tanh2 = tanh2 * tanh2;
+
+	return (1.0 - tanh2);
+}
+
+
 double enn_mlp_loss(struct enn_mlp_trainer *mlp_train, double out, double target)
 {
 	(void)mlp_train;

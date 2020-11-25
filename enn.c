@@ -70,6 +70,14 @@ void enn_lreluact_propagate(struct enn_layer *layer, const double *in)
 }
 
 
+void enn_tanhact_propagate(struct enn_layer *layer, const double *in)
+{
+	size_t n;
+	for(n = 0; n < layer->no; ++n)
+		layer->out[n] = tanh(in[n]);
+}
+
+
 void enn_propagate(struct enn_net *nn, const double *input)
 {
 	size_t l;
