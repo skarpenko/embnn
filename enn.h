@@ -78,7 +78,7 @@ void enn_prod_propagate(struct enn_layer *layer, const double *in);
 void enn_logact_propagate(struct enn_layer *layer, const double *in);
 /* Propagation function for rectified linear unit (ReLU) activation layer */
 void enn_reluact_propagate(struct enn_layer *layer, const double *in);
-/* Propagation function for Leaky ReLU activation layer */
+/* Propagation function for leaky ReLU activation layer */
 void enn_lreluact_propagate(struct enn_layer *layer, const double *in);
 /* Propagation function for hyperbolic tangent activation layer */
 void enn_tanhact_propagate(struct enn_layer *layer, const double *in);
@@ -198,7 +198,7 @@ void enn_tanhact_propagate(struct enn_layer *layer, const double *in);
 
 
 /*
- * Define Leaky ReLU activation layer
+ * Define leaky ReLU activation layer
  *
  * Arguments:
  *   _name - layer object name;
